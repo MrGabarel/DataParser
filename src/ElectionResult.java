@@ -10,6 +10,19 @@ public class ElectionResult {
     String county_name;
     int combined_fips;
 
+    public ElectionResult(double votes_dem, double votes_gop, double total_votes, double per_dem, double per_gop, double diff, double per_point_diff, String state_abbr, String county_name, int combined_fips) {
+        this.votes_dem = votes_dem;
+        this.votes_gop = votes_gop;
+        this.total_votes = total_votes;
+        this.per_dem = per_dem;
+        this.per_gop = per_gop;
+        this.diff = diff;
+        this.per_point_diff = per_point_diff;
+        this.state_abbr = state_abbr;
+        this.county_name = county_name;
+        this.combined_fips = combined_fips;
+    }
+
     public double getVotes_dem() {
         return votes_dem;
     }
