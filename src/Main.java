@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 /***
  * Main class for data parsers
  * @author: Guy Harel
@@ -7,6 +9,7 @@ public class Main {
         // Test of Utils
 
         String data = Utils.readFileAsString("data/2016_Presidential_Results.csv");
-        System.out.println("data = " + data);
+        ArrayList<ElectionResult> results = Utils.parse2016PresidentialResults(data);
+        System.out.println("results = " + results.get(0));
     }
 }
