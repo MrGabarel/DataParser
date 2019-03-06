@@ -1,14 +1,14 @@
 public class ElectionResult {
-    double votes_dem;
-    double votes_gop;
-    double total_votes;
-    double per_dem;
-    double per_gop;
-    double diff;
-    double per_point_diff;
-    String state_abbr;
-    String county_name;
-    int combined_fips;
+    private double votes_dem;
+    private double votes_gop;
+    private double total_votes;
+    private double per_dem;
+    private double per_gop;
+    private double diff;
+    private double per_point_diff;
+    private String state_abbr;
+    private String county_name;
+    private int combined_fips;
 
     public ElectionResult(double votes_dem, double votes_gop, double total_votes, double per_dem, double per_gop, double diff, double per_point_diff, String state_abbr, String county_name, int combined_fips) {
         this.votes_dem = votes_dem;

@@ -19,7 +19,8 @@ public class Utils {
 
         return output.toString();
     }
-    public static ArrayList<ElectionResult> parse2016PresidentialResults(String data){
+
+    public static ArrayList<ElectionResult> parse2016PresidentialResults(String data) {
         String[] lines = data.split("\n");
         ArrayList<ElectionResult> output = new ArrayList<>();
         for (int i = 1; i < lines.length; i++) {
@@ -38,7 +39,7 @@ public class Utils {
                         dataPieces[j] = lines[i].substring(previous + 1, current);
                         previous = current;
                     } else {
-                        while (current > loc1 && current < loc2){
+                        while (current > loc1 && current < loc2) {
                             current = lines[i].indexOf(",", current + 1);
                         }
                         current--;
