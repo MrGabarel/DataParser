@@ -28,33 +28,37 @@ public class Utils {
             if (lines[i].indexOf("\"") == -1) {
                 dataPieces = lines[i].split(",");
             } else {
-                int loc1 = lines[i].indexOf("\"");
-                int loc2 = lines[i].indexOf("\"", loc1 + 1);
-                dataPieces = new String[11];
-                int previous = 0;
-                int current = 0;
-                for (int j = 0; j < 10; j++) {
-                    current = lines[i].indexOf(",", current + 1);
-                    if (!(current > loc1 && current < loc2)) {
-                        dataPieces[j] = lines[i].substring(previous + 1, current);
-                        previous = current;
-                    } else {
-                        while (current > loc1 && current < loc2) {
-                            current = lines[i].indexOf(",", current + 1);
-                        }
-                        current--;
-                        j--;
-                    }
-                }
-                dataPieces[10] = lines[i].substring(previous + 1);
-                dataPieces[6] = dataPieces[6].replace("\"", "");
-                dataPieces[6] = dataPieces[6].replace(",", "");
+                dataPieces = splitProblematicStrings(lines[i]);
             }
             dataPieces[7] = dataPieces[7].substring(0, dataPieces[7].length() - 1);
-            System.out.println(i);
             ElectionResult electionResult = new ElectionResult(Double.valueOf(dataPieces[1]), Double.valueOf(dataPieces[2]), Double.valueOf(dataPieces[3]), Double.valueOf(dataPieces[4]), Double.valueOf(dataPieces[5]), Double.valueOf(dataPieces[6]), Double.valueOf(dataPieces[7]), dataPieces[8], dataPieces[9], Integer.valueOf(dataPieces[10]));
             output.add(electionResult);
         }
         return output;
+    }
+
+    private static String[] splitProblematicStrings(String line){
+        int loc1 = line.indexOf("\"");
+        int loc2 = line.indexOf("\"", loc1 + 1);
+        String[] dataPieces = new String[11];
+        int previous = 0;
+        int current = 0;
+        for (int j = 0; j < 10; j++) {
+            current = line.indexOf(",", current + 1);
+            if (!(current > loc1 && current < loc2)) {
+                dataPieces[j] = line.substring(previous + 1, current);
+                previous = current;
+            } else {
+                while (current > loc1 && current < loc2) {
+                    current = line.indexOf(",", current + 1);
+                }
+                current--;
+                j--;
+            }
+        }
+        dataPieces[10] = line.substring(previous + 1);
+        dataPieces[6] = dataPieces[6].replace("\"", "");
+        dataPieces[6] = dataPieces[6].replace(",", "");
+        return dataPieces;
     }
 }
