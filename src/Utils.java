@@ -116,7 +116,7 @@ public class Utils {
         return output;
     }
 
-    private static void addEmploymentParsed(String[][] electionParsed, DataManager output) {
+    private static void addElectionParsed(String[][] electionParsed, DataManager output) {
         ArrayList<State> states = output.getStates();
         for (int i = 0; i < electionParsed.length; i++) {
             String[] dataPieces = electionParsed[i];
@@ -125,11 +125,39 @@ public class Utils {
         }
     }
 
-    private static void addEducationParsed(String[][] electionParsed, DataManager output) {
-
+    private static void addEducationParsed(String[][] electionParsed, DataManager dataManager) {
+        ArrayList<State> states = dataManager.getStates();
+        for (int i = 0; i < electionParsed.length; i++) {
+            String[] dataPieces = electionParsed[i];
+            String state = dataPieces[1];
+            Education2016 input = new Education2016(Double.valueOf(dataPieces[7]), Double.valueOf(dataPieces[8]), Double.valueOf(dataPieces[9]), Double.valueOf(dataPieces[10]));
+            State correctState = new State(null, null);
+            for (int j = 0; j < states.size(); j++) {
+                if (state.equals(states.get(i).getName())) correctState = states.get(i);
+            }
+            County correctCounty = new County(null, 0, null, null, null);
+            for (int j = 0; j < correctState.getCounties().size(); j++) {
+                if (correctState.getCounties().get(i).getName().equals(dataPieces[2])) correctCounty = correctState.getCounties().get(i);
+            }
+            correctCounty.setEduc2016(input);
+        }
     }
 
-    private static void addElectionParsed(String[][] electionParsed, DataManager output) {
-
+    private static void addEmploymentParsed(String[][] employmentParsed, DataManager dataManager) {
+        ArrayList<State> states = dataManager.getStates();
+        for (int i = 0; i < employmentParsed.length; i++) {
+            String[] dataPieces = employmentParsed[i];
+            String state = dataPieces[1];
+            Employment2016 input = new Employment2016(Integer.valueOf(dataPieces[42]), Integer.valueOf(dataPieces[43]), Integer.valueOf(dataPieces[44]), Double.valueOf(dataPieces[45]));
+            State correctState = new State(null, null);
+            for (int j = 0; j < states.size(); j++) {
+                if (state.equals(states.get(i).getName())) correctState = states.get(i);
+            }
+            County correctCounty = new County(null, 0, null, null, null);
+            for (int j = 0; j < correctState.getCounties().size(); j++) {
+                if (correctState.getCounties().get(i).getName().equals(dataPieces[2])) correctCounty = correctState.getCounties().get(i);
+            }
+            correctCounty.setEmploy2016(input);
+        }
     }
 }
