@@ -115,4 +115,16 @@ public class Utils {
         addEmploymentParsed(electionParsed, output);
         return output;
     }
+
+    private static void addEmploymentParsed(String[][] electionParsed, DataManager output) {
+
+    }
+
+    private static void addEducationParsed(String[][] electionParsed, DataManager output) {
+
+    }
+
+    private static void addElectionParsed(String[][] electionParsed, DataManager output) {
+
+    }
 }
