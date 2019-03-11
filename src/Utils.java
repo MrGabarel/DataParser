@@ -31,7 +31,7 @@ public class Utils {
                 String changedWord = word.replace("\"", "");
                 changedWord = changedWord.replace(",", "");
                 changedWord = changedWord.replace(" ", "");
-                line.replace(oldWord, changedWord);
+                line = line.replace(oldWord, changedWord);
             }
         }
         return lines;
@@ -88,11 +88,11 @@ public class Utils {
         return dataPieces;
     }
 
-    public static String[][] parseGeneral(String data){
+    public static String[][] parseGeneral(String data, int startingLine){
         String[] lines = data.split("\n");
         String[][] output = new String[lines.length][52];
         removeQuotationMarks(lines);
-        for (int i = 0; i < lines.length; i++) {
+        for (int i = startingLine; i < lines.length; i++) {
             String line = lines[i];
             String[] dataPieces = line.split(",");
             output[i] = dataPieces;
@@ -101,13 +101,14 @@ public class Utils {
     }
 
     public static  DataManager parseAllData(String educationData, String electionData, String employmentData){
-        String[][] electionParsed = parseGeneral(electionData);
-        String[][] educationParsed = parseGeneral(educationData);
-        String[][] employmentParsed = parseGeneral(employmentData);
+        String[][] electionParsed = parseGeneral(electionData, 1);
+        String[][] educationParsed = parseGeneral(educationData, 5);
+        String[][] employmentParsed = parseGeneral(employmentData, 7);
         DataManager output = new DataManager(new ArrayList<State>());
         ArrayList<State> states = output.getStates();
         for (int i = 0; i < educationParsed.length; i++) {
             String[] strings = employmentParsed[i];
+            System.out.println(i);
             if (!states.contains(new State(strings[1], null))) states.add(new State(strings[1], null));
         }
         addElectionParsed(electionParsed, output);
