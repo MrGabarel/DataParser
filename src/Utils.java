@@ -29,7 +29,8 @@ public class Utils {
                 String oldWord = line.substring(index1, index2 + 1);
                 String word = oldWord;
                 String changedWord = word.replace("\"", "");
-                changedWord = word.replace(",", "");
+                changedWord = changedWord.replace(",", "");
+                changedWord = changedWord.replace(" ", "");
                 line.replace(oldWord, changedWord);
             }
         }
@@ -87,7 +88,7 @@ public class Utils {
         return dataPieces;
     }
 
-    public static void parseGeneral( String data){
+    public static String[][] parseGeneral(String data){
         String[] lines = data.split("\n");
         String[][] output = new String[lines.length][52];
         removeQuotationMarks(lines);
@@ -96,5 +97,22 @@ public class Utils {
             String[] dataPieces = line.split(",");
             output[i] = dataPieces;
         }
+        return output;
+    }
+
+    public static  DataManager parseAllData(String educationData, String electionData, String employmentData){
+        String[][] electionParsed = parseGeneral(electionData);
+        String[][] educationParsed = parseGeneral(educationData);
+        String[][] employmentParsed = parseGeneral(employmentData);
+        DataManager output = new DataManager(new ArrayList<State>());
+        ArrayList<State> states = output.getStates();
+        for (int i = 0; i < educationParsed.length; i++) {
+            String[] strings = employmentParsed[i];
+            if (!states.contains(new State(strings[1], null))) states.add(new State(strings[1], null));
+        }
+        addElectionParsed(electionParsed, output);
+        addEducationParsed(electionParsed, output);
+        addEmploymentParsed(electionParsed, output);
+        return output;
     }
 }
