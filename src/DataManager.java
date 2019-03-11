@@ -1,17 +1,17 @@
-import java.util.List;
+import java.util.ArrayList;
 
 public class DataManager {
-    private List<State> states;
+    private ArrayList<State> states;
 
-    public DataManager(List<State> states) {
+    public DataManager(ArrayList<State> states) {
         this.states = states;
     }
 
-    public List<State> getStates() {
+    public ArrayList<State> getStates() {
         return states;
     }
 
-    public void setStates(List<State> states) {
+    public void setStates(ArrayList<State> states) {
         this.states = states;
     }
 }

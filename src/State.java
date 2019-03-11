@@ -1,10 +1,10 @@
-import java.util.List;
+import java.util.ArrayList;
 
 public class State {
     private String name;
-    private List<County> counties;
+    private ArrayList<County> counties;
 
-    public State(String name, List<County> counties) {
+    public State(String name, ArrayList<County> counties) {
         this.name = name;
         this.counties = counties;
     }
@@ -17,11 +17,11 @@ public class State {
         this.name = name;
     }
 
-    public List<County> getCounties() {
+    public ArrayList<County> getCounties() {
         return counties;
     }
 
-    public void setCounties(List<County> counties) {
+    public void setCounties(ArrayList<County> counties) {
         this.counties = counties;
     }
 }
