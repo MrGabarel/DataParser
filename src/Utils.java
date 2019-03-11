@@ -20,12 +20,37 @@ public class Utils {
         return output.toString();
     }
 
+    public static String[] removeQuotationMarks(String[] lines){
+        for (int i = 0; i < lines.length; i++) {
+            String line = lines[i];
+            while (line.indexOf("\"") != -1){
+                int index1 = line.indexOf("\"");
+                int index2 = line.indexOf("\"", index1 + 1);
+                String oldWord = line.substring(index1, index2 + 1);
+                String word = oldWord;
+                String changedWord = word.replace("\"", "");
+                changedWord = word.replace(",", "");
+                line.replace(oldWord, changedWord);
+            }
+        }
+        return lines;
+    }
+    public static String[] removeConsecutiveCommas(String[] lines){
+        for (int i = 0; i < lines.length; i++) {
+            String line = lines[i];
+            while (line.indexOf(",,") != -1){
+                line.replace(",,", ",");
+            }
+        }
+        return lines;
+    }
+
     public static ArrayList<ElectionResult> parse2016PresidentialResults(String data) {
         String[] lines = data.split("\n");
         ArrayList<ElectionResult> output = new ArrayList<>();
         for (int i = 1; i < lines.length; i++) {
             String[] dataPieces;
-            if (lines[i].indexOf("\"") == -1) {
+            if (!lines[i].contains("\"")) {
                 dataPieces = lines[i].split(",");
             } else {
                 dataPieces = splitProblematicStrings(lines[i]);
@@ -60,5 +85,16 @@ public class Utils {
         dataPieces[6] = dataPieces[6].replace("\"", "");
         dataPieces[6] = dataPieces[6].replace(",", "");
         return dataPieces;
+    }
+
+    public static void parseGeneral( String data){
+        String[] lines = data.split("\n");
+        String[][] output = new String[lines.length][52];
+        removeQuotationMarks(lines);
+        for (int i = 0; i < lines.length; i++) {
+            String line = lines[i];
+            String[] dataPieces = line.split(",");
+            output[i] = dataPieces;
+        }
     }
 }
