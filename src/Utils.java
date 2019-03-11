@@ -117,7 +117,12 @@ public class Utils {
     }
 
     private static void addEmploymentParsed(String[][] electionParsed, DataManager output) {
-
+        ArrayList<State> states = output.getStates();
+        for (int i = 0; i < electionParsed.length; i++) {
+            String[] dataPieces = electionParsed[i];
+            Election2016 input = new Election2016(Double.valueOf(dataPieces[1]), Double.valueOf(dataPieces[2]), Double.valueOf(dataPieces[3]));
+            states.get(states.indexOf(dataPieces[8])).getCounties().add(new County(dataPieces[9], Integer.valueOf(dataPieces[10]), input, null, null));
+        }
     }
 
     private static void addEducationParsed(String[][] electionParsed, DataManager output) {
