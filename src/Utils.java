@@ -4,6 +4,13 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Utils {
+    private static int educStartingLine = 5;
+    private static int educEndingLine = 3209;
+    private static int electionStartingLine = 1;
+    private static int electionEndingLine = 3141;
+    private static int employStartingLine = 7;
+    private static int employEndingLine = 3204;
+
     public static String readFileAsString(String filepath) {
         StringBuilder output = new StringBuilder();
 
@@ -88,11 +95,11 @@ public class Utils {
         return dataPieces;
     }
 
-    public static String[][] parseGeneral(String data, int startingLine){
+    public static String[][] parseGeneral(String data, int startingLine, int endingLine){
         String[] lines = data.split("\n");
         String[][] output = new String[lines.length][52];
         removeQuotationMarks(lines);
-        for (int i = startingLine; i < lines.length; i++) {
+        for (int i = startingLine; i < endingLine; i++) {
             String line = lines[i];
             String[] dataPieces = line.split(",");
             output[i] = dataPieces;
@@ -100,14 +107,14 @@ public class Utils {
         return output;
     }
 
-    public static  DataManager parseAllData(String educationData, String electionData, String employmentData){
-        String[][] electionParsed = parseGeneral(electionData, 1);
-        String[][] educationParsed = parseGeneral(educationData, 5);
-        String[][] employmentParsed = parseGeneral(employmentData, 7);
+    public static  DataManager parseAllData(String electionData, String educationData, String employmentData){
+        String[][] electionParsed = parseGeneral(electionData, electionStartingLine, electionEndingLine);
+        String[][] educationParsed = parseGeneral(educationData, educStartingLine, educEndingLine);
+        String[][] employmentParsed = parseGeneral(employmentData, employStartingLine, employEndingLine );
         DataManager output = new DataManager(new ArrayList<State>());
         ArrayList<State> states = output.getStates();
-        for (int i = 0; i < educationParsed.length; i++) {
-            String[] strings = employmentParsed[i];
+        for (int i = educStartingLine; i < educEndingLine; i++) {
+            String[] strings = educationParsed[i];
             System.out.println(i);
             if (!states.contains(new State(strings[1], null))) states.add(new State(strings[1], null));
         }
@@ -119,7 +126,7 @@ public class Utils {
 
     private static void addElectionParsed(String[][] electionParsed, DataManager output) {
         ArrayList<State> states = output.getStates();
-        for (int i = 0; i < electionParsed.length; i++) {
+        for (int i = electionStartingLine; i < electionEndingLine; i++) {
             String[] dataPieces = electionParsed[i];
             Election2016 input = new Election2016(Double.valueOf(dataPieces[1]), Double.valueOf(dataPieces[2]), Double.valueOf(dataPieces[3]));
             states.get(states.indexOf(dataPieces[8])).getCounties().add(new County(dataPieces[9], Integer.valueOf(dataPieces[10]), input, null, null));
@@ -127,38 +134,36 @@ public class Utils {
     }
 
     private static void addEducationParsed(String[][] electionParsed, DataManager dataManager) {
-        ArrayList<State> states = dataManager.getStates();
-        for (int i = 0; i < electionParsed.length; i++) {
+        for (int i = educStartingLine; i < educEndingLine; i++) {
             String[] dataPieces = electionParsed[i];
-            String state = dataPieces[1];
+            String stateName = dataPieces[1];
+            String county = dataPieces[2];
             Education2016 input = new Education2016(Double.valueOf(dataPieces[7]), Double.valueOf(dataPieces[8]), Double.valueOf(dataPieces[9]), Double.valueOf(dataPieces[10]));
-            State correctState = new State(null, null);
-            for (int j = 0; j < states.size(); j++) {
-                if (state.equals(states.get(i).getName())) correctState = states.get(i);
-            }
-            County correctCounty = new County(null, 0, null, null, null);
-            for (int j = 0; j < correctState.getCounties().size(); j++) {
-                if (correctState.getCounties().get(i).getName().equals(dataPieces[2])) correctCounty = correctState.getCounties().get(i);
-            }
+            State state = findStateByName(stateName, dataManager);
+            County correctCounty = findCountyByName(county, state);
+            if (correctCounty.equals(null)) correctCounty = new County(county, Integer.valueOf(dataPieces[0]), null, null, null);
             correctCounty.setEduc2016(input);
         }
     }
 
     private static void addEmploymentParsed(String[][] employmentParsed, DataManager dataManager) {
-        ArrayList<State> states = dataManager.getStates();
-        for (int i = 0; i < employmentParsed.length; i++) {
+        for (int i = employStartingLine; i < employEndingLine; i++) {
             String[] dataPieces = employmentParsed[i];
-            String state = dataPieces[1];
+            String stateName = dataPieces[1];
+            String county = dataPieces[2];
             Employment2016 input = new Employment2016(Integer.valueOf(dataPieces[42]), Integer.valueOf(dataPieces[43]), Integer.valueOf(dataPieces[44]), Double.valueOf(dataPieces[45]));
-            State correctState = new State(null, null);
-            for (int j = 0; j < states.size(); j++) {
-                if (state.equals(states.get(i).getName())) correctState = states.get(i);
-            }
-            County correctCounty = new County(null, 0, null, null, null);
-            for (int j = 0; j < correctState.getCounties().size(); j++) {
-                if (correctState.getCounties().get(i).getName().equals(dataPieces[2])) correctCounty = correctState.getCounties().get(i);
-            }
+            State state = findStateByName(stateName, dataManager);
+            County correctCounty = findCountyByName(county, state);
+            if (correctCounty.equals(null)) correctCounty = new County(county, Integer.valueOf(dataPieces[0]), null, null, null);
             correctCounty.setEmploy2016(input);
         }
+    }
+    private static State findStateByName (String stateName, DataManager dataManager){
+        for (int i = 0; i < dataManager.getStates().size(); i++) if (dataManager.getStates().get(i).getName().equals(stateName)) return dataManager.getStates().get(i);
+        return null;
+    }
+    private static County findCountyByName(String countyName, State state){
+        for (int i = 0; i < state.getCounties().size(); i++) if (state.getCounties().get(i).getName().equals(countyName)) return state.getCounties().get(i);
+        return null;
     }
 }
